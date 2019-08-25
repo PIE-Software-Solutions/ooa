@@ -1,11 +1,40 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.pss.mypackage</groupId>
+	<groupId>com.piesoftsol.oneservice</groupId>
 	<artifactId>osf-authorization-server</artifactId>
-	<version>1.0.1</version>
+	<version>1.0.1-SNAPSHOT</version>
 	<name>osf-authorization-server</name>
 	<packaging>jar</packaging>
+	
+	<organization>
+		<name>Pie Software Solutions</name>
+		<url>http://piesoftsol.com</url>
+	</organization>
+	
+	<licenses>
+		<license>
+			<name>Apache License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0</url>
+		</license>
+	</licenses>
+    
+    <scm>
+		<url>https://github.com/PIE-Software-Solutions/osf-oauth-authorization</url>
+	</scm>
+	
+	<developers>
+		<developer>
+			<id>kk</id>
+			<name>Kiran Barnana</name>
+			<email>admin at piesoftsol.com</email>
+			<organization>Pie Software Solutions</organization>
+			<organizationUrl>http://piesoftsol.com</organizationUrl>
+			<roles>
+				<role>Project lead</role>
+			</roles>
+		</developer>
+	</developers>
 
 	<parent>
         <groupId>org.springframework.boot</groupId>
@@ -13,6 +42,17 @@
         <version>2.1.6.RELEASE</version>
 		<relativePath/>
     </parent>
+    
+    <distributionManagement>
+	  <snapshotRepository>
+	    <id>ossrh</id>
+	    <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+	  </snapshotRepository>
+	  <repository>
+	    <id>ossrh</id>
+	    <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+	  </repository>
+	</distributionManagement>
 
 	<dependencies>
 
@@ -26,6 +66,11 @@
             <groupId>com.fasterxml.jackson.datatype</groupId>
             <artifactId>jackson-datatype-jdk8</artifactId>
         </dependency>
+        <dependency>
+		    <groupId>org.springframework.cloud</groupId>
+		    <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+		    <version>${netflix-eureka-client.version}</version>
+		</dependency>
 
 		<!-- test -->
 		<dependency>
@@ -57,6 +102,55 @@
 	<build>
 		<plugins>
 			<plugin>
+		      <groupId>org.sonatype.plugins</groupId>
+		      <artifactId>nexus-staging-maven-plugin</artifactId>
+		      <version>1.6.7</version>
+		      <extensions>true</extensions>
+		      <configuration>
+		        <serverId>ossrh</serverId>
+		        <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+		        <autoReleaseAfterClose>true</autoReleaseAfterClose>
+		      </configuration>
+		    </plugin>
+			<plugin>
+			  <groupId>org.apache.maven.plugins</groupId>
+			  <artifactId>maven-source-plugin</artifactId>
+			  <executions>
+				<execution>
+				  <id>attach-sources</id>
+				  <goals>
+					<goal>jar-no-fork</goal>
+				  </goals>
+				</execution>
+			  </executions>
+			</plugin>
+			<plugin>
+			  <groupId>org.apache.maven.plugins</groupId>
+			  <artifactId>maven-javadoc-plugin</artifactId>
+			  <executions>
+				<execution>
+				  <id>attach-javadocs</id>
+				  <goals>
+					<goal>jar</goal>
+				  </goals>
+				</execution>
+			  </executions>
+			</plugin>
+			<plugin>
+			  <groupId>org.apache.maven.plugins</groupId>
+			  <artifactId>maven-gpg-plugin</artifactId>
+			  <version>1.5</version>
+			  <executions>
+				<execution>
+				  <id>sign-artifacts</id>
+				  <phase>verify</phase>
+				  <goals>
+					<goal>sign</goal>
+				  </goals>
+				</execution>
+			  </executions>
+			</plugin>
+			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
@@ -77,5 +171,6 @@
 		<!-- The main class to start by executing java -jar -->
 		<start-class>com.piesoftsol.oneservice.common.config.AuthorizationServerApplication</start-class>
 		<oneservice.version>1.0.5-SNAPSHOT</oneservice.version>
+		<netflix-eureka-client.version>2.1.2.RELEASE</netflix-eureka-client.version>
 	</properties>
 </project>
